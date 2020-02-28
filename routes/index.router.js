@@ -19,5 +19,6 @@ router.post('/makeInquiry', ctrlUser.makeInquiry)
 router.get('/getLoadedUser/:RegNo', ctrlUser.getLoadedUser)
 router.get('/getLoadedUserFromSLIITdb/:RegNo', ctrlUser.getLoadedUserFromSLIITdb)
 router.get('/getAccountBal/:RegNo', ctrlUser.getAccountBal)
+router.get('/getInquiryData/:RegNo', ctrlUser.getInquiryData)
 
 module.exports = router

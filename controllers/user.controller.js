@@ -202,13 +202,14 @@ module.exports.makeInquiry = (req, res, next) => {
   var msg = req.body.msg;
   var inq_date = req.body.inq_date;
   var contactNo = req.body.contactNo;
+  var title = req.body.titles;
 
 
 
-    const queryString = "INSERT INTO inquiry (RegNo, msg, contactNo, inq_date) VALUES (?,?,?,?)"
+    const queryString = "INSERT INTO inquiry (RegNo, title, msg, contactNo, inq_date) VALUES (?,?,?,?,?)"
     
 
-    con.query(queryString, [RegNo, msg, contactNo, inq_date], (err, results, fields) => {  
+    con.query(queryString, [RegNo,title, msg, contactNo, inq_date], (err, results, fields) => {  
         
         if(results){
             res.json({
@@ -225,4 +226,35 @@ module.exports.makeInquiry = (req, res, next) => {
         }
         
     })
+}
+
+module.exports.getInquiryData= (req, res, next) => {
+  var category=req.params.RegNo
+
+  const inquiryDitails = "SELECT * FROM inquiry WHERE RegNo = ?"
+
+  con.query(inquiryDitails, [category], (err, results, fields)=>{
+
+      if(err){
+        console.log(err);
+        res.json({
+          'success': false,
+          'message': 'could not connect to the db'
+        });
+      }
+
+      if(results.length > 0){
+        res.json({
+          'success': true,
+          'RegNo': results
+        });
+
+      }
+      else{
+        res.json({
+          'success': false,
+          'message1': 'User not found'
+        });
+      }
+  })
 }
