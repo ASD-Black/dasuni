@@ -20,5 +20,16 @@ router.get('/getLoadedUser/:RegNo', ctrlUser.getLoadedUser)
 router.get('/getLoadedUserFromSLIITdb/:RegNo', ctrlUser.getLoadedUserFromSLIITdb)
 router.get('/getAccountBal/:RegNo', ctrlUser.getAccountBal)
 router.get('/getInquiryData/:RegNo', ctrlUser.getInquiryData)
+router.get('/getPassengersNotices', ctrlUser.getPassengersNotices)
+
+router.get('/getUserLocation', ctrlUser.getUserLocation)
+router.get('/getDriversNotices', ctrlUser.getDriversNotices)
+
+router.post('/makeInquiryReplys', ctrlUser.makeInquiryReplys)
+router.post('/makeDeposit_payments', ctrlUser.makeDeposit_payments)
+router.post('/makePublicNotices', ctrlUser.makePublicNotices)
+router.post('/registerBuses', ctrlUser.registerBuses)
+router.post('/makeFuelExpenses', ctrlUser.makeFuelExpenses)
+router.post('/makeRepairExpenses', ctrlUser.makeRepairExpenses)
 
 module.exports = router

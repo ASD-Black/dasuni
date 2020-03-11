@@ -258,3 +258,288 @@ module.exports.getInquiryData= (req, res, next) => {
       }
   })
 }
+
+//--------------->>>>>>>>> get Passengers notifications
+
+module.exports.getPassengersNotices= (req, res, next) => {
+
+  const NotceDitails2 = "SELECT * FROM publicnotices WHERE msgType ='P' "
+
+  con.query(NotceDitails2, (err, results, fields)=>{
+
+      if(err){
+        console.log(err);
+        res.json({
+          'success': false,
+          'message': 'could not connect to the db'
+        });
+      }
+
+      if(results.length > 0){
+        res.json({
+          'success': true,
+          'Notices': results
+        });
+
+      }
+      else{
+        res.json({
+          'success': false,
+          'message1': 'Locations not found'
+        });
+      }
+  })
+}
+
+//////////////gamma ge part eka ---------------------------------------------------------------------------------------------------------------------------
+
+//--------------->>>>>>>>> get passengers pickUP and dropOFF locations
+
+module.exports.getUserLocation= (req, res, next) => {
+
+  const userDitails = "SELECT * FROM location WHERE journey_status ='Incomplete' "
+
+  con.query(userDitails, (err, results, fields)=>{
+
+      if(err){
+        console.log(err);
+        res.json({
+          'success': false,
+          'message': 'could not connect to the db'
+        });
+      }
+
+      if(results.length > 0){
+        res.json({
+          'success': true,
+          'Locations': results
+        });
+
+      }
+      else{
+        res.json({
+          'success': false,
+          'message1': 'Locations not found'
+        });
+      }
+  })
+}
+
+
+//--------------->>>>>>>>> get driver notifications
+
+module.exports.getDriversNotices= (req, res, next) => {
+
+  const NotceDitails = "SELECT * FROM publicnotices WHERE msgType ='D' "
+
+  con.query(NotceDitails, (err, results, fields)=>{
+
+      if(err){
+        console.log(err);
+        res.json({
+          'success': false,
+          'message': 'could not connect to the db'
+        });
+      }
+
+      if(results.length > 0){
+        res.json({
+          'success': true,
+          'Notices': results
+        });
+
+      }
+      else{
+        res.json({
+          'success': false,
+          'message1': 'Locations not found'
+        });
+      }
+  })
+}
+
+//////////////geeth malli ge part eka ---------------------------------------------------------------------------------------------------------------------------
+
+
+//--------------->>>>>>>>> make replys for users inquiries
+
+module.exports.makeInquiryReplys = (req, res, next) => {
+  var RegNo = req.body.regno;
+  var msg = req.body.msg;
+  var date = req.body.reply_date;
+
+
+
+    const queryString = "INSERT INTO inquiryreplys (RegNo, msg, date) VALUES (?,?,?)"
+    
+
+    con.query(queryString, [RegNo, msg, date], (err, results, fields) => {  
+        
+        if(results){
+            res.json({
+            'success': true,
+            'succmessage': 'Successfully send'
+            });
+        }
+
+        else if(err){
+            res.json({
+            'success': false,
+            'errmessage': 'could not connect to the db'
+            });
+        } 
+    })
+}
+
+//--------------->>>>>>>>> make manual payments
+
+module.exports.makeDeposit_payments = (req, res, next) => {
+  var RegNo = req.body.regno;
+  var amount = req.body.amount;
+  var date = req.body.payment_date;
+
+
+
+    const queryString1 = "INSERT INTO deposit_payments (RegNo, amount, date) VALUES (?,?,?)"
+    
+
+    con.query(queryString1, [RegNo, amount , date], (err, results, fields) => {  
+        
+        if(results){
+            res.json({
+            'success': true,
+            'succmessage': 'Payment successfull'
+            });
+        }
+
+        else if(err){
+            res.json({
+            'success': false,
+            'errmessage': 'could not connect to the db'
+            });
+        } 
+    })
+}
+
+//--------------->>>>>>>>> make public notices
+
+module.exports.makePublicNotices = (req, res, next) => {
+  var msgType = req.body.msgType;
+  var msg = req.body.msg;
+  var date = req.body.notice_date;
+
+
+
+    const queryString = "INSERT INTO publicnotices (msg, msgType, date) VALUES (?,?,?)"
+    
+
+    con.query(queryString, [msg, msgType, date], (err, results, fields) => {  
+        
+        if(results){
+            res.json({
+            'success': true,
+            'succmessage': 'Successfully send'
+            });
+        }
+
+        else if(err){
+            res.json({
+            'success': false,
+            'errmessage': 'could not connect to the db'
+            });
+        } 
+    })
+}
+
+//--------------->>>>>>>> Register a bus
+
+module.exports.registerBuses = (req, res, next) => {
+  var bus_id = req.body.bus_id;
+  var vehicle_number = req.body.vehicle_number;
+  var route = req.body.route;
+  var reg_date = req.body.reg_date;
+
+
+
+    const queryString3 = "INSERT INTO buses (bus_id, vehicle_number, route, reg_date) VALUES (?,?,?,?)"
+    
+
+    con.query(queryString3, [bus_id, vehicle_number, route, reg_date], (err, results, fields) => {  
+        
+        if(results){
+            res.json({
+            'success': true,
+            'succmessage': 'Register successfull'
+            });
+        }
+
+        else if(err){
+            res.json({
+            'success': false,
+            'errmessage': 'could not connect to the db'
+            });
+        } 
+    })
+}
+
+//--------------->>>>>>>> make fuel charges
+
+module.exports.makeFuelExpenses = (req, res, next) => {
+  var bus_id = req.body.bus_id;
+  var amount = req.body.amount;
+  var fuel_count = req.body.fuel_count;
+  var date = req.body.date;
+
+
+
+    const queryString4 = "INSERT INTO fuel_expenses (bus_id, amount, fuel_count, date) VALUES (?,?,?,?)"
+    
+
+    con.query(queryString4, [bus_id, amount, fuel_count, date], (err, results, fields) => {  
+        
+        if(results){
+            res.json({
+            'success': true,
+            'succmessage': 'Expense entered successfully'
+            });
+        }
+
+        else if(err){
+            res.json({
+            'success': false,
+            'errmessage': 'could not connect to the db'
+            });
+        } 
+    })
+}
+
+//--------------->>>>>>>> make bus repair charges
+
+module.exports.makeRepairExpenses = (req, res, next) => {
+  var bus_id = req.body.bus_id;
+  var amount = req.body.amount;
+  var status = req.body.status;
+  var date = req.body.date;
+
+
+
+    const queryString5 = "INSERT INTO repair_expenses (bus_id, amount, status, date) VALUES (?,?,?,?)"
+    
+
+    con.query(queryString5, [bus_id, amount, status, date], (err, results, fields) => {  
+        
+        if(results){
+            res.json({
+            'success': true,
+            'succmessage': 'Expense entered successfully'
+            });
+        }
+
+        else if(err){
+            res.json({
+            'success': false,
+            'errmessage': 'could not connect to the db'
+            });
+        } 
+    })
+}
