@@ -543,3 +543,35 @@ module.exports.makeRepairExpenses = (req, res, next) => {
         } 
     })
 }
+
+//--------------->>>>>>>> get all passengers fee amounts
+module.exports.getAllIncomes= (req, res, next) => {
+
+  const depositedDitails = "SELECT * FROM deposit_payments"
+
+  con.query(depositedDitails, (err, results, fields)=>{
+
+      if(err){
+        console.log(err);
+        res.json({
+          'success': false,
+          'message': 'could not connect to the db'
+        });
+      }
+
+      if(results.length > 0){
+        res.json({
+          'success': true,
+          'Details': results
+        });
+
+      }
+      else{
+        res.json({
+          'success': false,
+          'message1': 'no any deposits'
+        });
+      }
+  })
+}
+

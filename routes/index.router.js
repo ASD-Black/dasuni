@@ -31,5 +31,6 @@ router.post('/makePublicNotices', ctrlUser.makePublicNotices)
 router.post('/registerBuses', ctrlUser.registerBuses)
 router.post('/makeFuelExpenses', ctrlUser.makeFuelExpenses)
 router.post('/makeRepairExpenses', ctrlUser.makeRepairExpenses)
+router.get('/getAllIncomes', ctrlUser.getAllIncomes)
 
 module.exports = router
