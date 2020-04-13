@@ -9,6 +9,8 @@ const passport = require('passport')
 
 const rtsIndex = require('./routes/index.router')
 
+var PORT = process.env.PORT || 4000
+
 var app = express()
 
 //middleware
@@ -27,5 +29,7 @@ app.use((err, req, res, next) => {
 });
 
 //start server
-app.listen(process.env.PORT, () => console.log(`Srever started at port : ${process.env.PORT}`))
+app.listen(PORT, function(){
+    console.log(`Srever started at port : ${PORT}`)
+})
 
