@@ -1,5 +1,5 @@
 //check event.
-var env = process.env.NODE_ENV || 'development';
+ var env = process.env.NODE_ENV || 'development';
 
 //fetc the data from jonfig.json file
 var config = require('./config.json');
