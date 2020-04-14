@@ -6,9 +6,9 @@ const mysql = require('mysql')
 const User = mongoose.model('User')
 
 var con = mysql.createConnection({
-    host: 'localhost', // ip address of server running mysql
+    host: 'shuttle.ctrlvext8ekc.us-east-2.rds.amazonaws.com', // ip address of server running mysql
     user: 'root', // user name to your mysql database
-    password: 'root',// corresponding password
+    password: 'root942632126',// corresponding password
     database: 'shuttle_db'
     //insecureAuth : true,
   });
