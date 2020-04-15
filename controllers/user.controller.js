@@ -14,9 +14,9 @@ var con = mysql.createConnection({
   });
 
   var con_sliitDb = mysql.createConnection({
-    host: 'localhost', // ip address of server running mysql
+    host: 'shuttle.ctrlvext8ekc.us-east-2.rds.amazonaws.com', // ip address of server running mysql
     user: 'root', // user name to your mysql database
-    password: 'root',// corresponding password
+    password: 'root942632126',// corresponding password
     database: 'sliit'
     //insecureAuth : true,
   });
