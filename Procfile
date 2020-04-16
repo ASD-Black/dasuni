@@ -1,1 +1,1 @@
-web: node index.js
+web: forever start index.js
