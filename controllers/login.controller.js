@@ -43,10 +43,8 @@ app.use(router);
 
 /* ### login ## */
 exports.login = function (req, res) {
-
-
-  let usernameQuery = "SELECT * FROM login WHERE Username='" + req.body.userName + "'AND Password='" + req.body.password + "' ";
-  db.query(usernameQuery, (err, result) => {
+  let usernameQuery = "SELECT * FROM login WHERE username='" + req.body.userName + "'AND password='" + req.body.password + "' ";
+  shuttle_db.query(usernameQuery, (err, result) => {
     if (err) //throw err;
       return res.status(500).json({ message: err,  isSuccess: false });
     else {
@@ -54,7 +52,7 @@ exports.login = function (req, res) {
         console.log(result[0].userName);
         return res.status(200).json({
           response: {
-            userName: result[0].Username,
+            userName: result[0].username,
           },
           message: "Logged in Successfully",
           isSuccess: true
