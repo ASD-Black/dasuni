@@ -6,17 +6,17 @@ const mysql = require('mysql')
 const User = mongoose.model('User')
 
 var con = mysql.createConnection({
-    host: 'shuttle.ctrlvext8ekc.us-east-2.rds.amazonaws.com', // ip address of server running mysql
+    host: 'localhost', // ip address of server running mysql-------shuttle.ctrlvext8ekc.us-east-2.rds.amazonaws.com
     user: 'root', // user name to your mysql database
-    password: 'root942632126',// corresponding password
+    password: 'root',// corresponding password ----------------root942632126
     database: 'shuttle_db'
     //insecureAuth : true,
   });
 
   var con_sliitDb = mysql.createConnection({
-    host: 'shuttle.ctrlvext8ekc.us-east-2.rds.amazonaws.com', // ip address of server running mysql
+    host: 'localhost', // ip address of server running mysql
     user: 'root', // user name to your mysql database
-    password: 'root942632126',// corresponding password
+    password: 'root',// corresponding password
     database: 'sliit'
     //insecureAuth : true,
   });
@@ -259,6 +259,100 @@ module.exports.getInquiryData= (req, res, next) => {
   })
 }
 
+module.exports.getPaymentsDetails= (req, res, next) => {
+  var category=req.params.RegNo
+
+  const pmtdata = "SELECT * FROM deposit_payments WHERE RegNo = ? ORDER BY date DESC"
+
+  con.query(pmtdata, [category], (err, results, fields)=>{
+
+      if(err){
+        console.log(err);
+        res.json({
+          'success': false,
+          'message': 'could not connect to the db'
+        });
+      }
+
+      if(results.length > 0){
+        res.json({
+          'success': true,
+          'RegNo': results
+        });
+
+      }
+      else{
+        res.json({
+          'success': false,
+          'message1': 'No any payments done yet...!'
+        });
+      }
+  })
+}
+
+module.exports.makeStarRating = (req, res, next) => {
+  var score = req.body.rate;
+  var RegNo = req.body.regno;
+  var date = req.body.date;
+
+    const storeRate = "INSERT INTO star_rating (score, RegNo, date) VALUES (?,?,?)"
+    
+
+    con.query(storeRate, [score, RegNo, date], (err, results, fields) => {  
+        
+        if(results){
+            res.json({
+            'success': true,
+            'succmessage': 'Thank You... Inquiry succesfull'
+            });
+        }
+
+        else if(err){
+            res.json({
+            'success': false,
+            'errmessage': 'could not connect to the db'
+            });
+        }
+        
+    })
+}
+
+module.exports.markTheLocations = (req, res, next) => {
+  var route = req.body.route;
+  var action_status = req.body.action_status;
+  var placeName = req.body.placeName;
+  var placeAdress = req.body.placeAdress;
+  var latitude = req.body.latitude;
+  var longitude = req.body.longitude;
+  var journey_status = req.body.journey_status;
+  var date = req.body.date;
+  var RegNo = req.body.RegNo;
+  
+  console.log(req.body)
+
+
+    const markLocation = "INSERT INTO locations (route,action_status, placeName, placeAdress, latitude, longitude, journey_status, date, RegNo) VALUES (?,?,?,?,?,?,?,?,?)"
+    
+
+    con.query(markLocation, [route,action_status, placeName, placeAdress, latitude, longitude, journey_status, date, RegNo], (err, results, fields) => {  
+        
+        if(results){
+            res.json({
+            'success': true,
+            'succmessage': 'Location Saved'
+            });
+        }
+
+        else if(err){
+            res.json({
+            'success': false,
+            'errmessage': 'could not connect to the db'
+            });
+        }
+        
+    })
+}
+
 //--------------->>>>>>>>> get Passengers notifications
 
 module.exports.getPassengersNotices= (req, res, next) => {
@@ -297,7 +391,7 @@ module.exports.getPassengersNotices= (req, res, next) => {
 
 module.exports.getUserLocation= (req, res, next) => {
 
-  const userDitails = "SELECT * FROM location WHERE journey_status ='Incomplete' "
+  const userDitails = "SELECT * FROM locations WHERE journey_status ='incom'"
 
   con.query(userDitails, (err, results, fields)=>{
 
