@@ -24,6 +24,7 @@ router.get('/getPassengersNotices', ctrlUser.getPassengersNotices)
 router.get('/getPaymentsDetails/:RegNo', ctrlUser.getPaymentsDetails)
 router.get('/getAllIncomes', ctrlUser.getAllIncomes)
 
+
 router.get('/getUserLocation', ctrlUser.getUserLocation)
 router.get('/getDriversNotices', ctrlUser.getDriversNotices)
 
@@ -35,5 +36,7 @@ router.post('/makeFuelExpenses', ctrlUser.makeFuelExpenses)
 router.post('/makeRepairExpenses', ctrlUser.makeRepairExpenses)
 router.post('/makeStarRating', ctrlUser.makeStarRating)
 router.post('/markTheLocations', ctrlUser.markTheLocations)
+router.post('/checkCardDetails', ctrlUser.checkCardDetails)
+router.put('/makeCardPayments', ctrlUser.makeCardPayments)
 
 module.exports = router

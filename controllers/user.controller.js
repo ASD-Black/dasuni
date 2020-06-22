@@ -6,20 +6,20 @@ const mysql = require('mysql')
 const User = mongoose.model('User')
 
 var con = mysql.createConnection({
-    host: 'localhost', // ip address of server running mysql-------shuttle.ctrlvext8ekc.us-east-2.rds.amazonaws.com
-    user: 'root', // user name to your mysql database
-    password: 'root',// corresponding password ----------------root942632126
-    database: 'shuttle_db'
-    //insecureAuth : true,
-  });
+  host: 'shuttle.ctrlvext8ekc.us-east-2.rds.amazonaws.com', // ip address of server running mysql
+  user: 'root', // user name to your mysql database
+  password: 'root942632126',// corresponding password
+  database: 'shuttle_db'
+  //insecureAuth : true,
+});
 
-  var con_sliitDb = mysql.createConnection({
-    host: 'localhost', // ip address of server running mysql
-    user: 'root', // user name to your mysql database
-    password: 'root',// corresponding password
-    database: 'sliit'
-    //insecureAuth : true,
-  });
+var con_sliitDb = mysql.createConnection({
+  host: 'shuttle.ctrlvext8ekc.us-east-2.rds.amazonaws.com', // ip address of server running mysql
+  user: 'root', // user name to your mysql database
+  password: 'root942632126',// corresponding password
+  database: 'sliit'
+  //insecureAuth : true,
+});
 
   con.connect(function(err) {
     if(!err){
@@ -352,6 +352,90 @@ module.exports.markTheLocations = (req, res, next) => {
         
     })
 }
+
+module.exports.checkCardDetails = (req, res, next) =>{
+    
+  var nameOnCard = req.body.nameOnCard;
+  var cNumber = req.body.cNumber;
+  var cvc = req.body.cvc;
+  var expDate = req.body.expDate;
+  var cType = req.body.cType;
+
+  con.query(
+
+    "SELECT * FROM smpl_cards WHERE nameOnCard = ? AND cNumber = ? AND cvc = ? AND expDate = ? AND cType = ?",
+    [nameOnCard, cNumber, cvc, expDate, cType], function(err, row, field){
+  
+      if(err){
+        console.log(err);
+        res.send({
+          'success': false,
+          'message': 'could not connect to the db'
+        });
+      }
+  
+      if(row.length > 0){
+        res.send({
+          'success': true,
+          'smpl_cards': row[0].nameOnCard        
+        });
+      }
+
+      else{
+        res.send({
+          'success': false,
+          'message1': 'Invalied Card'
+        });
+      }
+    }
+  );
+}
+
+module.exports.makeCardPayments = (req, res, next) => {
+  var amount = req.body.amount;
+  var RegNo = req.body.regno;
+  var date = req.body.inq_date;
+  var pay_type = req.body.pay_type;
+
+    const storePayments = "INSERT INTO deposit_payments (RegNo, amount, date, pay_type) VALUES (?,?,?,?)"
+    const Query2 = "UPDATE wallet w SET balance = balance + '" + amount + "' WHERE RegNo= '" + RegNo + "'"
+    
+
+    con.query(storePayments, [RegNo, amount, date, pay_type], (err, results, fields) => {  
+        
+        if(results){
+            con.query(Query2, (err, results, fields) => {  
+        
+              if(results){
+                res.json({
+                  'success': true,
+                  'succmessage': 'Thank You... Payment succesfull'
+                  });
+              }
+      
+              else if(err){
+                  res.json({
+                  'success': false,
+                  'errmessage': 'could not connect to the db'
+                  });
+              }
+              
+          })
+
+        }
+
+        else if(err){
+            res.json({
+            'success': false,
+            'errmessage': 'could not connect to the db'
+            });
+        }
+        
+    })
+
+}
+
+
 
 //--------------->>>>>>>>> get Passengers notifications
 
