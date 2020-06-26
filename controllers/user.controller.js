@@ -6,9 +6,9 @@ const mysql = require('mysql')
 const User = mongoose.model('User')
 
 var con = mysql.createConnection({
-  host: 'shuttle.ctrlvext8ekc.us-east-2.rds.amazonaws.com', // ip address of server running mysql
+  host: 'shuttle.ctrlvext8ekc.us-east-2.rds.amazonaws.com', // ip address of server running mysql  shuttle.ctrlvext8ekc.us-east-2.rds.amazonaws.com
   user: 'root', // user name to your mysql database
-  password: 'root942632126',// corresponding password
+  password: 'root942632126',// corresponding password  root942632126
   database: 'shuttle_db'
   //insecureAuth : true,
 });
@@ -231,7 +231,7 @@ module.exports.makeInquiry = (req, res, next) => {
 module.exports.getInquiryData= (req, res, next) => {
   var category=req.params.RegNo
 
-  const inquiryDitails = "SELECT * FROM inquiry WHERE RegNo = ?"
+  const inquiryDitails = "SELECT * FROM inquiry WHERE RegNo = ? ORDER BY inq_date DESC"
 
   con.query(inquiryDitails, [category], (err, results, fields)=>{
 
@@ -335,11 +335,13 @@ module.exports.markTheLocations = (req, res, next) => {
     
 
     con.query(markLocation, [route,action_status, placeName, placeAdress, latitude, longitude, journey_status, date, RegNo], (err, results, fields) => {  
-        
+        console.log("results")
+        console.log(results.insertId)
         if(results){
             res.json({
             'success': true,
-            'succmessage': 'Location Saved'
+            'succmessage': 'Location Saved',
+            'insertId':results.insertId
             });
         }
 
@@ -435,6 +437,119 @@ module.exports.makeCardPayments = (req, res, next) => {
 
 }
 
+module.exports.updateNoticeReadStatus = (req, res, next) => {
+  var id = req.body.n_id;
+  
+
+  const Query3 = "UPDATE publicnotices SET status = 'close' WHERE n_id= ?"
+
+  con.query(Query3,[id], (err, results, fields)=>{
+
+    if(results){
+      res.json({
+        'success': true,
+        //'succmessage': 'Thank You... Payment succesfull'
+        });
+    }
+
+    else if(err){
+        res.json({
+        'success': false,
+        'errmessage': 'could not connect to the db'
+        });
+    }
+      
+  })
+}
+
+module.exports.updateIRReadStatus = (req, res, next) => {
+  var id = req.body.rInq_id;
+  
+
+  const Query4 = "UPDATE inquiryreplys SET status = 'close' WHERE rInq_id= ?"
+
+  con.query(Query4,[id], (err, results, fields)=>{
+
+    if(results){
+      res.json({
+        'success': true,
+        //'succmessage': 'Thank You... Payment succesfull'
+        });
+    }
+
+    else if(err){
+        res.json({
+        'success': false,
+        'errmessage': 'could not connect to the db'
+        });
+    }
+      
+  })
+}
+
+module.exports.getIRs= (req, res, next) => {
+  var category=req.params.RegNo
+
+  const inqui = "SELECT * FROM inquiryreplys WHERE RegNo = ? ORDER BY date DESC"
+
+  con.query(inqui, [category], (err, results, fields)=>{
+
+      if(err){
+        console.log(err);
+        res.json({
+          'success': false,
+          'message': 'could not connect to the db'
+        });
+      }
+
+      if(results.length > 0){
+        res.json({
+          'success': true,
+          'RegNo': results
+        });
+
+      }
+      else{
+        res.json({
+          'success': false,
+          'message1': 'User not found'
+        });
+      }
+  })
+}
+
+
+module.exports.getPublicNotices= (req, res, next) => {
+  //var category=req.params.RegNo
+
+  const noticeDitails = "SELECT * FROM publicnotices WHERE msgType = 'P' ORDER BY date DESC"
+
+  con.query(noticeDitails, (err, results, fields)=>{
+
+      if(err){
+        console.log(err);
+        res.json({
+          'success': false,
+          'message': 'could not connect to the db'
+        });
+      }
+
+      if(results.length > 0){
+        res.json({
+          'success': true,
+          'RegNo': results
+        });
+
+      }
+      else{
+        res.json({
+          'success': false,
+          //'message1': ' not found'
+        });
+      }
+  })
+}
+
 
 
 //--------------->>>>>>>>> get Passengers notifications
@@ -469,6 +584,36 @@ module.exports.getPassengersNotices= (req, res, next) => {
   })
 }
 
+module.exports.getNewMessageCount= (req, res, next) => {
+  var category=req.params.RegNo
+console.log(category)
+  const pmtdata1 = "SELECT (SELECT COUNT(status) AS count FROM shuttle_db.publicnotices  WHERE status = 'open' AND msgType = 'P') + (SELECT COUNT(status) AS count FROM shuttle_db.inquiryreplys  WHERE status = 'open' AND RegNo = ?) AS COUNT "
+
+  con.query(pmtdata1, [category], (err, results, fields)=>{
+
+      if(err){
+        console.log(err);
+        res.json({
+          'success': false,
+          'message': 'could not connect to the db'
+        });
+      }
+
+      if(results.length > 0){
+        res.json({
+          'success': true,
+          'RegNo': results
+        });
+
+      }
+      else{
+        res.json({
+          'success': false,
+          'message1': 'No any payments done yet...!'
+        });
+      }
+  })
+}
 //////////////gamma ge part eka ---------------------------------------------------------------------------------------------------------------------------
 
 //--------------->>>>>>>>> get passengers pickUP and dropOFF locations

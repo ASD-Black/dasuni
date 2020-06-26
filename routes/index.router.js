@@ -23,6 +23,9 @@ router.get('/getInquiryData/:RegNo', ctrlUser.getInquiryData)
 router.get('/getPassengersNotices', ctrlUser.getPassengersNotices)
 router.get('/getPaymentsDetails/:RegNo', ctrlUser.getPaymentsDetails)
 router.get('/getAllIncomes', ctrlUser.getAllIncomes)
+router.get('/getNewMessageCount/:RegNo', ctrlUser.getNewMessageCount)
+router.get('/getPublicNotices', ctrlUser.getPublicNotices)
+router.get('/getIRs/:RegNo', ctrlUser.getIRs)
 
 
 router.get('/getUserLocation', ctrlUser.getUserLocation)
@@ -38,5 +41,7 @@ router.post('/makeStarRating', ctrlUser.makeStarRating)
 router.post('/markTheLocations', ctrlUser.markTheLocations)
 router.post('/checkCardDetails', ctrlUser.checkCardDetails)
 router.put('/makeCardPayments', ctrlUser.makeCardPayments)
+router.put('/updateNoticeReadStatus', ctrlUser.updateNoticeReadStatus)
+router.put('/updateIRReadStatus', ctrlUser.updateIRReadStatus)
 
 module.exports = router
